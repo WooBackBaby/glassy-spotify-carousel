@@ -91,7 +91,7 @@
   }
 
   body {
-    @apply bg-white text-foreground transition-colors duration-300;
+    @apply bg-background text-foreground transition-colors duration-300;
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -102,6 +102,10 @@
 @layer utilities {
   .glass-card {
     @apply bg-white/90 backdrop-blur-lg border border-slate-200/50;
+  }
+  
+  .dark .glass-card {
+    @apply bg-slate-900/90 border-slate-700/50;
   }
   
   .modern-shadow {
@@ -159,6 +163,29 @@
       rgba(255, 255, 255, 0.5) 50%,
       rgba(255, 255, 255, 0.7) 75%,
       rgba(255, 255, 255, 0.9) 100%
+    );
+    backdrop-filter: blur(25px) saturate(1.3);
+  }
+
+  .dark .progressive-blur {
+    background: linear-gradient(135deg, 
+      rgba(30, 41, 59, 0.8) 0%,
+      rgba(30, 41, 59, 0.6) 25%,
+      rgba(30, 41, 59, 0.4) 50%,
+      rgba(30, 41, 59, 0.6) 75%,
+      rgba(30, 41, 59, 0.8) 100%
+    );
+    backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+  }
+
+  .dark .progressive-blur:hover {
+    background: linear-gradient(135deg, 
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(30, 41, 59, 0.7) 25%,
+      rgba(30, 41, 59, 0.5) 50%,
+      rgba(30, 41, 59, 0.7) 75%,
+      rgba(30, 41, 59, 0.9) 100%
     );
     backdrop-filter: blur(25px) saturate(1.3);
   }
