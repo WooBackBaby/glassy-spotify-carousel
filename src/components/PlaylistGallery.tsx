@@ -83,7 +83,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   };
   return <div className={`min-h-screen font-sans transition-colors duration-300 ${
     darkMode 
-      ? 'bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900' 
+      ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' 
       : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'
   }`}>
       {/* Floating Header */}
@@ -91,16 +91,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         <div className="max-w-7xl mx-auto">
           <div className={`backdrop-blur-xl border shadow-2xl px-8 py-6 rounded-full transition-colors duration-300 ${
             darkMode 
-              ? 'bg-slate-900/80 border-slate-700/20' 
+              ? 'bg-neutral-900/80 border-neutral-700/20' 
               : 'bg-white/80 border-white/20'
           }`}>
             <div className="flex justify-between items-center">
               <div className="space-y-1">
                 <h1 className={`text-4xl font-light tracking-tight leading-tight transition-colors duration-300 ${
-                  darkMode ? 'text-slate-100' : 'text-slate-900'
+                  darkMode ? 'text-neutral-100' : 'text-slate-900'
                 }`}>The Pantry</h1>
                 <p className={`text-lg font-light tracking-wide transition-colors duration-300 ${
-                  darkMode ? 'text-slate-400' : 'text-slate-500'
+                  darkMode ? 'text-neutral-400' : 'text-slate-500'
                 }`}>
                   A collection of handpicked playlists
                 </p>
@@ -111,7 +111,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                 onClick={toggleDarkMode} 
                 className={`rounded-full transition-all duration-300 w-12 h-12 backdrop-blur-sm ${
                   darkMode 
-                    ? 'bg-slate-700 hover:bg-slate-600 text-slate-100' 
+                    ? 'bg-neutral-700 hover:bg-neutral-600 text-neutral-100' 
                     : 'bg-gray-400 hover:bg-gray-300 text-slate-900'
                 }`}
               >
@@ -129,15 +129,15 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
           <div className="relative">
             {/* Navigation Buttons */}
             <Button variant="ghost" size="icon" onClick={prevPlaylist} className={`absolute left-0 top-1/2 -translate-y-1/2 z-30 progressive-blur shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${
-              darkMode ? 'border border-slate-600/40' : 'border border-white/40'
+              darkMode ? 'border border-neutral-600/40' : 'border border-white/40'
             }`}>
-              <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-slate-200/90' : 'text-white/90'}`} />
+              <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-white/90'}`} />
             </Button>
             
             <Button variant="ghost" size="icon" onClick={nextPlaylist} className={`absolute right-0 top-1/2 -translate-y-1/2 z-30 progressive-blur shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${
-              darkMode ? 'border border-slate-600/40' : 'border border-white/40'
+              darkMode ? 'border border-neutral-600/40' : 'border border-white/40'
             }`}>
-              <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-slate-200/90' : 'text-white/90'}`} />
+              <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-white/90'}`} />
             </Button>
 
             {/* Carousel */}
@@ -152,31 +152,31 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
             }} onClick={() => handlePlaylistClick(playlist)}>
                   <div className="group relative preserve-3d">
                     <div className={`progressive-blur rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 ${
-                      darkMode ? 'border border-slate-600/30' : 'border border-white/30'
+                      darkMode ? 'border border-neutral-600/30' : 'border border-white/30'
                     }`}>
                       <div className="relative overflow-hidden rounded-2xl mb-6">
                         <img src={playlist.cover} alt={playlist.name} className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
                           <div className={`backdrop-blur-sm rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 ${
-                            darkMode ? 'bg-slate-800/90' : 'bg-white/90'
+                            darkMode ? 'bg-neutral-800/90' : 'bg-white/90'
                           }`}>
-                            <Play className={`w-8 h-8 ${darkMode ? 'text-slate-100' : 'text-slate-900'}`} />
+                            <Play className={`w-8 h-8 ${darkMode ? 'text-neutral-100' : 'text-slate-900'}`} />
                           </div>
                         </div>
                       </div>
                       <div className="text-center space-y-3">
                         <h3 className={`font-medium text-2xl tracking-tight leading-tight transition-colors duration-300 ${
-                          darkMode ? 'text-slate-100' : 'text-slate-900'
+                          darkMode ? 'text-neutral-100' : 'text-slate-900'
                         }`}>
                           {playlist.name}
                         </h3>
                         <p className={`text-sm font-light leading-relaxed max-w-xs mx-auto transition-colors duration-300 ${
-                          darkMode ? 'text-slate-400' : 'text-slate-500'
+                          darkMode ? 'text-neutral-400' : 'text-slate-500'
                         }`}>
                           {playlist.description}
                         </p>
                         <p className={`text-xs tracking-wide uppercase transition-colors duration-300 ${
-                          darkMode ? 'text-slate-500' : 'text-slate-400'
+                          darkMode ? 'text-neutral-500' : 'text-slate-400'
                         }`}>
                           {playlist.trackCount} tracks
                         </p>
@@ -192,22 +192,22 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         {selectedPlaylist && <div className="max-w-5xl mx-auto px-8 animate-fade-in">
             <div className={`backdrop-blur-md rounded-3xl shadow-2xl border overflow-hidden transition-colors duration-300 ${
               darkMode 
-                ? 'bg-slate-900/95 border-slate-700/30' 
+                ? 'bg-neutral-900/95 border-neutral-700/30' 
                 : 'bg-white/95 border-white/30'
             }`}>
               <div className={`p-10 border-b transition-colors duration-300 ${
-                darkMode ? 'border-slate-700/50' : 'border-slate-100/50'
+                darkMode ? 'border-neutral-700/50' : 'border-slate-100/50'
               }`}>
                 <div className="flex items-center space-x-6">
                   <img src={selectedPlaylist.cover} alt={selectedPlaylist.name} className="w-20 h-20 rounded-2xl object-cover shadow-lg" />
                   <div>
                     <h2 className={`text-3xl font-medium tracking-tight leading-tight mb-2 transition-colors duration-300 ${
-                      darkMode ? 'text-slate-100' : 'text-slate-900'
+                      darkMode ? 'text-neutral-100' : 'text-slate-900'
                     }`}>
                       {selectedPlaylist.name}
                     </h2>
                     <p className={`font-light text-lg transition-colors duration-300 ${
-                      darkMode ? 'text-slate-400' : 'text-slate-500'
+                      darkMode ? 'text-neutral-400' : 'text-slate-500'
                     }`}>
                       {selectedPlaylist.description} • {selectedPlaylist.trackCount} tracks
                     </p>
@@ -231,12 +231,12 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       {/* Footer */}
       <footer className={`border-t backdrop-blur-sm py-12 transition-colors duration-300 ${
         darkMode 
-          ? 'border-slate-700/50 bg-slate-900/50' 
+          ? 'border-neutral-700/50 bg-neutral-900/50' 
           : 'border-slate-100/50 bg-white/50'
       }`}>
         <div className="max-w-7xl mx-auto px-8 text-center">
           <p className={`text-sm font-light tracking-wide transition-colors duration-300 ${
-            darkMode ? 'text-slate-500' : 'text-slate-400'
+            darkMode ? 'text-neutral-500' : 'text-slate-400'
           }`}>
             Crafted with care using React, Tailwind CSS, and Spotify Web API
           </p>
