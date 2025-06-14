@@ -107,11 +107,11 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         <div className="max-w-7xl mx-auto px-8 mb-20">
           <div className="relative">
             {/* Navigation Buttons */}
-            <Button variant="ghost" size="icon" onClick={prevPlaylist} className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 hover:bg-white/95">
+            <Button variant="ghost" size="icon" onClick={prevPlaylist} className="absolute left-0 top-1/2 -translate-y-1/2 z-30 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 bg-gray-400 hover:bg-gray-300">
               <ChevronLeft className="h-5 w-5" />
             </Button>
             
-            <Button variant="ghost" size="icon" onClick={nextPlaylist} className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 hover:bg-white/95">
+            <Button variant="ghost" size="icon" onClick={nextPlaylist} className="absolute right-0 top-1/2 -translate-y-1/2 z-30 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 bg-gray-400 hover:bg-gray-300">
               <ChevronRight className="h-5 w-5" />
             </Button>
 
