@@ -92,16 +92,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans">
+    <div className="min-h-screen bg-white font-sans">
       {/* Header */}
-      <header className="border-b border-slate-200/60 dark:border-slate-700/60 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-8 py-8">
           <div className="flex justify-between items-center">
-            <div className="space-y-1">
-              <h1 className="text-4xl font-light tracking-tight text-slate-900 dark:text-slate-100">
+            <div className="space-y-2">
+              <h1 className="text-5xl font-light tracking-tight text-slate-900 leading-tight">
                 Curated
               </h1>
-              <p className="text-slate-600 dark:text-slate-400 font-light">
+              <p className="text-slate-500 text-lg font-light tracking-wide">
                 A collection of handpicked playlists
               </p>
             </div>
@@ -109,7 +109,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
               variant="ghost"
               size="icon"
               onClick={toggleDarkMode}
-              className="rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="rounded-full hover:bg-slate-50 transition-all duration-300 w-12 h-12"
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
@@ -118,16 +118,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 py-16">
+      <main className="flex-1 py-20">
         {/* Carousel Section */}
-        <div className="max-w-7xl mx-auto px-6 mb-16">
+        <div className="max-w-7xl mx-auto px-8 mb-20">
           <div className="relative">
             {/* Navigation Buttons */}
             <Button
               variant="ghost"
               size="icon"
               onClick={prevPlaylist}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl rounded-full w-12 h-12 border border-slate-200 dark:border-slate-700"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white shadow-lg hover:shadow-xl rounded-full w-14 h-14 border border-slate-200/60 transition-all duration-300 hover:scale-110"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
@@ -136,51 +136,54 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
               variant="ghost"
               size="icon"
               onClick={nextPlaylist}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white dark:bg-slate-800 shadow-lg hover:shadow-xl rounded-full w-12 h-12 border border-slate-200 dark:border-slate-700"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white shadow-lg hover:shadow-xl rounded-full w-14 h-14 border border-slate-200/60 transition-all duration-300 hover:scale-110"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
 
             {/* Carousel */}
-            <div className="flex justify-center items-center h-96 overflow-hidden px-16">
+            <div className="flex justify-center items-center h-[500px] overflow-hidden px-20 perspective-1000">
               {getVisiblePlaylists().map(({ playlist, offset }) => (
                 <div
                   key={playlist.id}
                   className={`absolute transition-all duration-700 ease-out cursor-pointer ${
                     offset === 0
-                      ? 'z-20 scale-100'
+                      ? 'z-20'
                       : offset === -1 || offset === 1
-                      ? 'z-10 scale-90 opacity-60'
-                      : 'z-0 scale-75 opacity-30'
+                      ? 'z-10'
+                      : 'z-0'
                   }`}
                   style={{
-                    transform: `translateX(${offset * 240}px) scale(${
-                      offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.9 : 0.75
+                    transform: `translateX(${offset * 200}px) translateY(${Math.abs(offset) * 20}px) rotateY(${offset * -15}deg) rotateZ(${offset * 3}deg) scale(${
+                      offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.85 : 0.7
                     })`,
-                    opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
+                    opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.7 : 0.4,
+                    filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 1.5}px)`,
                   }}
                   onClick={() => handlePlaylistClick(playlist)}
                 >
-                  <div className="group relative">
-                    <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:scale-105 border border-slate-200/50 dark:border-slate-700/50">
-                      <div className="relative overflow-hidden rounded-2xl mb-4">
+                  <div className="group relative preserve-3d">
+                    <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 hover:scale-105 border border-slate-100">
+                      <div className="relative overflow-hidden rounded-2xl mb-6">
                         <img
                           src={playlist.cover}
                           alt={playlist.name}
-                          className="w-56 h-56 object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                          <Play className="w-12 h-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                            <Play className="w-8 h-8 text-slate-900" />
+                          </div>
                         </div>
                       </div>
-                      <div className="text-center space-y-2">
-                        <h3 className="font-medium text-xl text-slate-900 dark:text-slate-100 tracking-tight">
+                      <div className="text-center space-y-3">
+                        <h3 className="font-medium text-2xl text-slate-900 tracking-tight leading-tight">
                           {playlist.name}
                         </h3>
-                        <p className="text-slate-600 dark:text-slate-400 text-sm font-light">
+                        <p className="text-slate-500 text-sm font-light leading-relaxed max-w-xs mx-auto">
                           {playlist.description}
                         </p>
-                        <p className="text-slate-500 dark:text-slate-500 text-xs">
+                        <p className="text-slate-400 text-xs tracking-wide uppercase">
                           {playlist.trackCount} tracks
                         </p>
                       </div>
@@ -194,20 +197,20 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
 
         {/* Embedded Spotify Player */}
         {selectedPlaylist && (
-          <div className="max-w-5xl mx-auto px-6 animate-fade-in">
-            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
-              <div className="p-8 border-b border-slate-200/50 dark:border-slate-700/50">
-                <div className="flex items-center space-x-4">
+          <div className="max-w-5xl mx-auto px-8 animate-fade-in">
+            <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
+              <div className="p-10 border-b border-slate-100">
+                <div className="flex items-center space-x-6">
                   <img
                     src={selectedPlaylist.cover}
                     alt={selectedPlaylist.name}
-                    className="w-16 h-16 rounded-xl object-cover"
+                    className="w-20 h-20 rounded-2xl object-cover shadow-lg"
                   />
                   <div>
-                    <h2 className="text-2xl font-medium text-slate-900 dark:text-slate-100 tracking-tight">
+                    <h2 className="text-3xl font-medium text-slate-900 tracking-tight leading-tight mb-2">
                       {selectedPlaylist.name}
                     </h2>
-                    <p className="text-slate-600 dark:text-slate-400 font-light">
+                    <p className="text-slate-500 font-light text-lg">
                       {selectedPlaylist.description} • {selectedPlaylist.trackCount} tracks
                     </p>
                   </div>
@@ -217,7 +220,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
                 <iframe
                   src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.embedId}?utm_source=generator&theme=0`}
                   width="100%"
-                  height="380"
+                  height="400"
                   frameBorder="0"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"
@@ -229,9 +232,9 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200/60 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md py-8">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-slate-600 dark:text-slate-400 text-sm font-light">
+      <footer className="border-t border-slate-100 bg-white py-12">
+        <div className="max-w-7xl mx-auto px-8 text-center">
+          <p className="text-slate-400 text-sm font-light tracking-wide">
             Crafted with care using React, Tailwind CSS, and Spotify Web API
           </p>
         </div>
