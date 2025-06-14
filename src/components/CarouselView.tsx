@@ -38,11 +38,11 @@ const CarouselView: React.FC<CarouselViewProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-8 mb-8">
       {/* Navigation Buttons */}
-      <Button variant="ghost" size="icon" onClick={onPrev} className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 progressive-blur shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'border border-neutral-600/40' : 'border border-white/40'}`}>
+      <Button variant="ghost" size="icon" onClick={onPrev} className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
         <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
       </Button>
       
-      <Button variant="ghost" size="icon" onClick={onNext} className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 progressive-blur shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'border border-neutral-600/40' : 'border border-white/40'}`}>
+      <Button variant="ghost" size="icon" onClick={onNext} className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
         <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
       </Button>
 
