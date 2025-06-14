@@ -7,11 +7,17 @@ import CarouselView from '@/components/CarouselView';
 import CategoryFilterChips from '@/components/CategoryFilterChips';
 import PlaylistPlayer from '@/components/PlaylistPlayer';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Twitter } from 'lucide-react';
+
 interface PlaylistGalleryProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
 }
+
 type SortMode = 'carousel' | 'category' | 'alphabetical';
+
 const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   darkMode,
   toggleDarkMode
@@ -20,9 +26,11 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   const [selectedPlaylist, setSelectedPlaylist] = useState<CategorizedPlaylist | null>(null);
   const [sortMode, setSortMode] = useState<SortMode>('carousel');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [email, setEmail] = useState('');
   const {
     toast
   } = useToast();
+
   const spotifyUserId = 'kcin531';
   const {
     data: playlists = [],
@@ -40,6 +48,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       });
     }
   }, [error, toast]);
+
   const categorizedPlaylists = categorizePlaylists(playlists);
   const groupedPlaylists = groupPlaylistsByCategory(categorizedPlaylists);
   const filteredPlaylists = selectedCategory && selectedCategory !== 'All' ? categorizedPlaylists.filter(playlist => playlist.category === selectedCategory) : categorizedPlaylists;
@@ -57,18 +66,34 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     count: categorizedPlaylists.filter(p => p.category === 'Other').length,
     emoji: '🍽️'
   }].filter(category => category.count > 0);
+
   React.useEffect(() => {
     setCurrentIndex(0);
   }, [selectedCategory]);
+
   const nextPlaylist = () => {
     setCurrentIndex(prev => (prev + 1) % filteredPlaylists.length);
   };
+
   const prevPlaylist = () => {
     setCurrentIndex(prev => (prev - 1 + filteredPlaylists.length) % filteredPlaylists.length);
   };
+
   const handlePlaylistClick = (playlist: CategorizedPlaylist) => {
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email) {
+      toast({
+        title: "Thanks for subscribing!",
+        description: "You'll receive updates about new playlists and features.",
+      });
+      setEmail('');
+    }
+  };
+
   if (isLoading) {
     return <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
         <div className="flex items-center justify-center h-screen">
@@ -78,6 +103,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         </div>
       </div>;
   }
+
   if (error) {
     return <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
         <div className="flex items-center justify-center h-screen">
@@ -92,6 +118,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         </div>
       </div>;
   }
+
   if (playlists.length === 0) {
     return <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
         <div className="flex items-center justify-center h-screen">
@@ -101,6 +128,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         </div>
       </div>;
   }
+
   return <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
       <FloatingHeader darkMode={darkMode} toggleDarkMode={toggleDarkMode} sortMode={sortMode} setSortMode={setSortMode} />
 
@@ -144,12 +172,62 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       </main>
 
       <footer className="py-[40px]">
-        <div className="max-w-4xl mx-auto px-8 text-center">
-          <p className={`text-sm font-light tracking-wide transition-colors duration-300 ${darkMode ? 'text-neutral-500' : 'text-slate-400'}`}>
-            Crafted with care using React, Tailwind CSS, and Spotify Web API
-          </p>
+        <div className="max-w-4xl mx-auto px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-6">
+            {/* Social Media */}
+            <div className="flex items-center gap-4">
+              <span className={`text-sm font-medium ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
+                Follow us:
+              </span>
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`p-2 rounded-full transition-colors duration-200 ${
+                  darkMode 
+                    ? 'bg-neutral-800/60 hover:bg-neutral-700/80 text-neutral-300 hover:text-white border border-neutral-700/30' 
+                    : 'bg-white/60 hover:bg-white/80 text-slate-600 hover:text-slate-800 border border-white/30'
+                }`}
+              >
+                <Twitter size={20} />
+              </a>
+            </div>
+
+            {/* Newsletter Signup */}
+            <form onSubmit={handleSubscribe} className="flex gap-2 w-full max-w-sm">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className={`flex-1 ${
+                  darkMode 
+                    ? 'bg-neutral-800/60 border-neutral-700/30 text-neutral-200 placeholder:text-neutral-400' 
+                    : 'bg-white/60 border-white/30 text-slate-700 placeholder:text-slate-500'
+                }`}
+              />
+              <Button 
+                type="submit"
+                className={`whitespace-nowrap ${
+                  darkMode 
+                    ? 'bg-neutral-700 hover:bg-neutral-600 text-neutral-200' 
+                    : 'bg-slate-700 hover:bg-slate-800 text-white'
+                }`}
+              >
+                Subscribe
+              </Button>
+            </form>
+          </div>
+
+          <div className="text-center">
+            <p className={`text-sm font-light tracking-wide transition-colors duration-300 ${darkMode ? 'text-neutral-500' : 'text-slate-400'}`}>
+              Crafted with care using React, Tailwind CSS, and Spotify Web API
+            </p>
+          </div>
         </div>
       </footer>
     </div>;
 };
+
 export default PlaylistGallery;
