@@ -33,7 +33,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   toggleDarkMode
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | CategorizedPlaylist | null>(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<CategorizedPlaylist | null>(null);
   const [sortMode, setSortMode] = useState<SortMode>('carousel');
   
   // Extract user ID from the Spotify profile URL
@@ -46,7 +46,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   const groupedPlaylists = groupPlaylistsByCategory(categorizedPlaylists);
   
   // Alphabetically sorted playlists
-  const alphabeticalPlaylists = [...playlists].sort((a, b) => a.name.localeCompare(b.name));
+  const alphabeticalCategorizedPlaylists = [...categorizedPlaylists].sort((a, b) => a.name.localeCompare(b.name));
 
   const nextPlaylist = () => {
     setCurrentIndex(prev => (prev + 1) % playlists.length);
@@ -56,8 +56,14 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     setCurrentIndex(prev => (prev - 1 + playlists.length) % playlists.length);
   };
 
-  const handlePlaylistClick = (playlist: Playlist | CategorizedPlaylist) => {
+  const handlePlaylistClick = (playlist: CategorizedPlaylist) => {
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
+  };
+
+  const handleCarouselPlaylistClick = (playlist: Playlist) => {
+    // Convert regular playlist to categorized playlist for consistency
+    const categorized = categorizePlaylists([playlist])[0];
+    setSelectedPlaylist(selectedPlaylist?.id === categorized.id ? null : categorized);
   };
 
   const getVisiblePlaylists = () => {
@@ -82,6 +88,19 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       default: return 'Carousel View';
     }
   };
+
+  // Log playlist names to console for analysis
+  React.useEffect(() => {
+    if (playlists.length > 0) {
+      console.log('=== PLAYLIST ANALYSIS ===');
+      console.log('Total playlists:', playlists.length);
+      console.log('Playlist names:');
+      playlists.forEach((playlist, index) => {
+        console.log(`${index + 1}. "${playlist.name}"`);
+      });
+      console.log('=== END ANALYSIS ===');
+    }
+  }, [playlists]);
 
   if (isLoading) {
     return (
@@ -194,7 +213,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                     opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
                     filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
                   }}
-                  onClick={() => handlePlaylistClick(playlist)}
+                  onClick={() => handleCarouselPlaylistClick(playlist)}
                 >
                   <div className="group relative preserve-3d">
                     <div className={`progressive-blur rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 ${darkMode ? 'border border-neutral-600/30' : 'border border-white/30'}`}>
@@ -243,7 +262,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
         {sortMode === 'alphabetical' && (
           <div className="max-w-6xl mx-auto px-8 mb-20">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {alphabeticalPlaylists.map(playlist => (
+              {alphabeticalCategorizedPlaylists.map(playlist => (
                 <div
                   key={playlist.id}
                   className={`group relative cursor-pointer transition-all duration-300 hover:scale-105 ${
@@ -262,6 +281,13 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                         alt={playlist.name}
                         className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
                       />
+                      <div className="absolute top-2 right-2">
+                        <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          darkMode ? 'bg-neutral-700/80 text-neutral-200' : 'bg-white/80 text-slate-700'
+                        }`}>
+                          {playlist.categoryEmoji}
+                        </div>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <h3 className={`font-medium text-lg leading-tight ${
@@ -272,7 +298,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                       <p className={`text-sm ${
                         darkMode ? 'text-neutral-400' : 'text-slate-500'
                       }`}>
-                        {playlist.trackCount} tracks
+                        {playlist.trackCount} tracks • {playlist.category}
                       </p>
                     </div>
                   </div>
