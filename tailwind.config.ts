@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				glass: {
+					50: 'rgba(248, 250, 252, 0.05)',
+					100: 'rgba(241, 245, 249, 0.08)',
+					200: 'rgba(226, 232, 240, 0.12)',
+					300: 'rgba(203, 213, 225, 0.16)',
+					400: 'rgba(148, 163, 184, 0.20)',
+					500: 'rgba(100, 116, 139, 0.25)',
+					600: 'rgba(71, 85, 105, 0.30)',
+					700: 'rgba(51, 65, 85, 0.35)',
+					800: 'rgba(30, 41, 59, 0.40)',
+					900: 'rgba(15, 23, 42, 0.45)',
 				}
 			},
 			borderRadius: {
@@ -84,11 +97,29 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0px)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'lift': {
+					'0%': { transform: 'translateY(0px) scale(1)' },
+					'100%': { transform: 'translateY(-20px) scale(1.05)' }
+				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0px)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 6s ease-in-out infinite',
+				'lift': 'lift 0.3s ease-out forwards',
+				'fade-in': 'fade-in 0.6s ease-out'
+			},
+			backdropBlur: {
+				xs: '2px',
 			}
 		}
 	},
