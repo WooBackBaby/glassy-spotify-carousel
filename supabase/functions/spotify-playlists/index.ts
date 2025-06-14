@@ -68,6 +68,13 @@ serve(async (req) => {
     }
 
     console.log(`Fetched ${allPlaylists.length} total playlists for user ${userId}`)
+    
+    // Log ALL playlist titles for analysis
+    console.log('=== COMPLETE PLAYLIST ANALYSIS ===')
+    allPlaylists.forEach((playlist: any, index: number) => {
+      console.log(`${index + 1}. "${playlist.name}"`)
+    })
+    console.log('=== END COMPLETE ANALYSIS ===')
 
     // Transform the data to match our frontend format
     const transformedPlaylists = allPlaylists

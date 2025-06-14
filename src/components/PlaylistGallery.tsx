@@ -89,16 +89,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     }
   };
 
-  // Log playlist names to console for analysis
+  // Log complete playlist analysis to console
   React.useEffect(() => {
     if (playlists.length > 0) {
-      console.log('=== PLAYLIST ANALYSIS ===');
-      console.log('Total playlists:', playlists.length);
-      console.log('Playlist names:');
+      console.log('=== COMPLETE FRONTEND PLAYLIST ANALYSIS ===');
+      console.log('Total playlists received:', playlists.length);
+      console.log('All playlist names:');
       playlists.forEach((playlist, index) => {
         console.log(`${index + 1}. "${playlist.name}"`);
       });
-      console.log('=== END ANALYSIS ===');
+      console.log('=== END COMPLETE FRONTEND ANALYSIS ===');
     }
   }, [playlists]);
 
