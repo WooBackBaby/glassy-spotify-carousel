@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Twitter } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PlaylistGalleryProps {
   darkMode: boolean;
@@ -25,6 +26,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   const [sortMode, setSortMode] = useState<SortMode>('carousel');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [email, setEmail] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const {
     toast
   } = useToast();
@@ -74,14 +76,43 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   const handlePlaylistClick = (playlist: CategorizedPlaylist) => {
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (!email || isSubscribing) return;
+
+    setIsSubscribing(true);
+    
+    try {
+      const { error } = await supabase
+        .from('newsletter_subscriptions')
+        .insert([{ email }]);
+
+      if (error) {
+        if (error.code === '23505') { // Unique constraint violation
+          toast({
+            title: "Already subscribed!",
+            description: "This email is already on our newsletter list.",
+            variant: "destructive"
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        toast({
+          title: "Thanks for subscribing!",
+          description: "You'll receive updates about new playlists and features."
+        });
+        setEmail('');
+      }
+    } catch (error) {
+      console.error('Error subscribing to newsletter:', error);
       toast({
-        title: "Thanks for subscribing!",
-        description: "You'll receive updates about new playlists and features."
+        title: "Subscription failed",
+        description: "Please try again later.",
+        variant: "destructive"
       });
-      setEmail('');
+    } finally {
+      setIsSubscribing(false);
     }
   };
   if (isLoading) {
@@ -173,9 +204,21 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
 
             {/* Newsletter Signup */}
             <form onSubmit={handleSubscribe} className="flex gap-2 w-full max-w-sm">
-              <Input type="email" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} required className={`flex-1 ${darkMode ? 'bg-neutral-800/60 border-neutral-700/30 text-neutral-200 placeholder:text-neutral-400' : 'bg-white/60 border-white/30 text-slate-700 placeholder:text-slate-500'}`} />
-              <Button type="submit" className={`whitespace-nowrap ${darkMode ? 'bg-neutral-700 hover:bg-neutral-600 text-neutral-200' : 'bg-slate-700 hover:bg-slate-800 text-white'}`}>
-                Subscribe
+              <Input 
+                type="email" 
+                placeholder="Enter your email" 
+                value={email} 
+                onChange={e => setEmail(e.target.value)} 
+                required 
+                disabled={isSubscribing}
+                className={`flex-1 ${darkMode ? 'bg-neutral-800/60 border-neutral-700/30 text-neutral-200 placeholder:text-neutral-400' : 'bg-white/60 border-white/30 text-slate-700 placeholder:text-slate-500'}`} 
+              />
+              <Button 
+                type="submit" 
+                disabled={isSubscribing}
+                className={`whitespace-nowrap ${darkMode ? 'bg-neutral-700 hover:bg-neutral-600 text-neutral-200' : 'bg-slate-700 hover:bg-slate-800 text-white'}`}
+              >
+                {isSubscribing ? 'Subscribing...' : 'Subscribe'}
               </Button>
             </form>
           </div>
