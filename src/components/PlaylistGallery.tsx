@@ -92,33 +92,35 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans">
-      {/* Header */}
-      <header className="border-b border-slate-100 bg-white/95 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-8 py-8">
-          <div className="flex justify-between items-center">
-            <div className="space-y-2">
-              <h1 className="text-5xl font-light tracking-tight text-slate-900 leading-tight">
-                Curated
-              </h1>
-              <p className="text-slate-500 text-lg font-light tracking-wide">
-                A collection of handpicked playlists
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 font-sans">
+      {/* Floating Header */}
+      <header className="fixed top-4 left-4 right-4 z-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl px-8 py-6">
+            <div className="flex justify-between items-center">
+              <div className="space-y-1">
+                <h1 className="text-4xl font-light tracking-tight text-slate-900 leading-tight">
+                  Curated
+                </h1>
+                <p className="text-slate-500 text-lg font-light tracking-wide">
+                  A collection of handpicked playlists
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleDarkMode}
+                className="rounded-full hover:bg-slate-100/50 transition-all duration-300 w-12 h-12 backdrop-blur-sm"
+              >
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+              </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleDarkMode}
-              className="rounded-full hover:bg-slate-50 transition-all duration-300 w-12 h-12"
-            >
-              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 py-20">
+      <main className="flex-1 pt-32 pb-20">
         {/* Carousel Section */}
         <div className="max-w-7xl mx-auto px-8 mb-20">
           <div className="relative">
@@ -127,7 +129,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
               variant="ghost"
               size="icon"
               onClick={prevPlaylist}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white shadow-lg hover:shadow-xl rounded-full w-14 h-14 border border-slate-200/60 transition-all duration-300 hover:scale-110"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 hover:bg-white/95"
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
@@ -136,7 +138,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
               variant="ghost"
               size="icon"
               onClick={nextPlaylist}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white shadow-lg hover:shadow-xl rounded-full w-14 h-14 border border-slate-200/60 transition-all duration-300 hover:scale-110"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-30 bg-white/90 backdrop-blur-md shadow-xl hover:shadow-2xl rounded-full w-14 h-14 border border-white/40 transition-all duration-300 hover:scale-110 hover:bg-white/95"
             >
               <ChevronRight className="h-5 w-5" />
             </Button>
@@ -154,16 +156,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
                       : 'z-0'
                   }`}
                   style={{
-                    transform: `translateX(${offset * 200}px) translateY(${Math.abs(offset) * 20}px) rotateY(${offset * -15}deg) rotateZ(${offset * 3}deg) scale(${
-                      offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.85 : 0.7
+                    transform: `translateX(${offset * 180}px) translateY(${Math.abs(offset) * 25}px) rotateY(${offset * -20}deg) rotateZ(${offset * 4}deg) skewY(${offset * 2}deg) scale(${
+                      offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.8 : 0.65
                     })`,
-                    opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.7 : 0.4,
-                    filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 1.5}px)`,
+                    opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
+                    filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`,
                   }}
                   onClick={() => handlePlaylistClick(playlist)}
                 >
                   <div className="group relative preserve-3d">
-                    <div className="bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-4 hover:scale-105 border border-slate-100">
+                    <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 border border-white/30 hover:bg-white">
                       <div className="relative overflow-hidden rounded-2xl mb-6">
                         <img
                           src={playlist.cover}
@@ -198,8 +200,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
         {/* Embedded Spotify Player */}
         {selectedPlaylist && (
           <div className="max-w-5xl mx-auto px-8 animate-fade-in">
-            <div className="bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden">
-              <div className="p-10 border-b border-slate-100">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/30 overflow-hidden">
+              <div className="p-10 border-b border-slate-100/50">
                 <div className="flex items-center space-x-6">
                   <img
                     src={selectedPlaylist.cover}
@@ -232,7 +234,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-100 bg-white py-12">
+      <footer className="border-t border-slate-100/50 bg-white/50 backdrop-blur-sm py-12">
         <div className="max-w-7xl mx-auto px-8 text-center">
           <p className="text-slate-400 text-sm font-light tracking-wide">
             Crafted with care using React, Tailwind CSS, and Spotify Web API

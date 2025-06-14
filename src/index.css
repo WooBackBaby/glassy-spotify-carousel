@@ -116,6 +116,10 @@
     box-shadow: 0 24px 80px -16px rgba(0, 0, 0, 0.16);
   }
 
+  .shadow-3xl {
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+  }
+
   .perspective-1000 {
     perspective: 1000px;
   }
@@ -126,5 +130,13 @@
 
   .backface-hidden {
     backface-visibility: hidden;
+  }
+
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+  
+  .backdrop-blur-3xl {
+    backdrop-filter: blur(64px);
   }
 }
