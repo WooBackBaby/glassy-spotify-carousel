@@ -71,32 +71,35 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     }
   ].filter(category => category.count > 0);
 
+  // Reset current index when category changes
+  React.useEffect(() => {
+    setCurrentIndex(0);
+  }, [selectedCategory]);
+
   const nextPlaylist = () => {
-    setCurrentIndex(prev => (prev + 1) % playlists.length);
+    setCurrentIndex(prev => (prev + 1) % filteredPlaylists.length);
   };
 
   const prevPlaylist = () => {
-    setCurrentIndex(prev => (prev - 1 + playlists.length) % playlists.length);
+    setCurrentIndex(prev => (prev - 1 + filteredPlaylists.length) % filteredPlaylists.length);
   };
 
   const handlePlaylistClick = (playlist: CategorizedPlaylist) => {
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
 
-  const handleCarouselPlaylistClick = (playlist: Playlist) => {
-    // Convert regular playlist to categorized playlist for consistency
-    const categorized = categorizePlaylists([playlist])[0];
-    setSelectedPlaylist(selectedPlaylist?.id === categorized.id ? null : categorized);
+  const handleCarouselPlaylistClick = (playlist: CategorizedPlaylist) => {
+    setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
 
   const getVisiblePlaylists = () => {
-    if (playlists.length === 0) return [];
+    if (filteredPlaylists.length === 0) return [];
     
     const visible = [];
     for (let i = -2; i <= 2; i++) {
-      const index = (currentIndex + i + playlists.length) % playlists.length;
+      const index = (currentIndex + i + filteredPlaylists.length) % filteredPlaylists.length;
       visible.push({
-        playlist: playlists[index],
+        playlist: filteredPlaylists[index],
         offset: i
       });
     }
