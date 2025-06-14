@@ -89,7 +89,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
             <div className="flex justify-between items-center">
               <div className="space-y-1">
                 <h1 className="text-base font-semibold">The Pantry</h1>
-                <p className={`text-lg font-light tracking-wide transition-colors duration-300 ${darkMode ? 'text-neutral-400' : 'text-slate-500'}`}>
+                <p className="text-xs font-medium">
                   A collection of handpicked playlists
                 </p>
               </div>
