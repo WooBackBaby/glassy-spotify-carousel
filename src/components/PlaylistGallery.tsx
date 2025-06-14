@@ -81,19 +81,19 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900">
       {/* Header */}
-      <header className="glass-subtle rounded-none border-0 border-b border-white/10 dark:border-white/5 p-6 sticky top-0 z-50">
+      <header className="modern-header sticky top-0 z-50 p-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold gradient-text">Playlist Gallery</h1>
-            <p className="text-muted-foreground mt-1">Discover your perfect soundtrack</p>
+            <p className="text-slate-600 dark:text-slate-400 mt-1">Discover your perfect soundtrack</p>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleDarkMode}
-            className="glass hover:glass-strong transition-all duration-300 rounded-full"
+            className="modern-card hover:modern-card-elevated rounded-full w-12 h-12"
           >
             {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
@@ -109,7 +109,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
             variant="ghost"
             size="icon"
             onClick={prevPlaylist}
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 glass hover:glass-strong transition-all duration-300 rounded-full w-12 h-12"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-10 modern-card hover:modern-card-elevated rounded-full w-12 h-12"
           >
             <ChevronLeft className="h-6 w-6" />
           </Button>
@@ -118,7 +118,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
             variant="ghost"
             size="icon"
             onClick={nextPlaylist}
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 glass hover:glass-strong transition-all duration-300 rounded-full w-12 h-12"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-10 modern-card hover:modern-card-elevated rounded-full w-12 h-12"
           >
             <ChevronRight className="h-6 w-6" />
           </Button>
@@ -144,7 +144,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
                 onClick={() => handlePlaylistClick(playlist)}
               >
                 <div className="relative group">
-                  <div className="glass-strong rounded-2xl p-4 transition-all duration-300 hover:scale-105 hover:-translate-y-4 hover:shadow-2xl">
+                  <div className="modern-card hover:modern-card-elevated p-4 transition-all duration-300 hover:scale-105 hover:-translate-y-4">
                     <img
                       src={playlist.cover}
                       alt={playlist.name}
@@ -154,9 +154,6 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
                       <h3 className="font-semibold text-lg gradient-text">{playlist.name}</h3>
                     </div>
                   </div>
-                  
-                  {/* Hover Effect Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl pointer-events-none" />
                 </div>
               </div>
             ))}
@@ -166,11 +163,11 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
         {/* Embedded Spotify Player */}
         {selectedPlaylist && (
           <div className="mt-12 w-full max-w-4xl animate-fade-in">
-            <div className="glass-strong rounded-2xl p-6">
+            <div className="modern-card-elevated p-6">
               <h2 className="text-2xl font-bold gradient-text mb-4 text-center">
                 Now Playing: {selectedPlaylist.name}
               </h2>
-              <div className="relative rounded-xl overflow-hidden">
+              <div className="relative rounded-xl overflow-hidden shadow-lg">
                 <iframe
                   src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.embedId}?utm_source=generator&theme=0`}
                   width="100%"
@@ -187,8 +184,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({ darkMode, toggleDarkM
       </main>
 
       {/* Footer */}
-      <footer className="glass-subtle border-0 border-t border-white/10 dark:border-white/5 p-6 text-center">
-        <p className="text-muted-foreground text-sm">
+      <footer className="modern-header border-t border-slate-200 dark:border-slate-700 p-6 text-center">
+        <p className="text-slate-600 dark:text-slate-400 text-sm">
           Built with 💖 using React, Tailwind CSS, and Spotify Web API
         </p>
       </footer>

@@ -3,11 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Glass morphism design system with cool greys */
+/* Modern clean design system with white background and grey shadows */
 
 @layer base {
   :root {
-    --background: 220 17% 97%;
+    --background: 0 0% 100%;
     --foreground: 220 15% 9%;
 
     --card: 0 0% 100%;
@@ -17,7 +17,7 @@
     --popover-foreground: 220 15% 9%;
 
     --primary: 220 15% 25%;
-    --primary-foreground: 220 17% 97%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 220 15% 95%;
     --secondary-foreground: 220 15% 25%;
@@ -37,10 +37,10 @@
 
     --radius: 0.75rem;
 
-    --sidebar-background: 220 17% 98%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 15% 15%;
     --sidebar-primary: 220 15% 25%;
-    --sidebar-primary-foreground: 220 17% 97%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 220 15% 94%;
     --sidebar-accent-foreground: 220 15% 25%;
     --sidebar-border: 220 15% 90%;
@@ -48,13 +48,13 @@
   }
 
   .dark {
-    --background: 220 15% 4%;
+    --background: 220 15% 8%;
     --foreground: 220 17% 95%;
 
-    --card: 220 15% 6%;
+    --card: 220 15% 10%;
     --card-foreground: 220 17% 95%;
 
-    --popover: 220 15% 6%;
+    --popover: 220 15% 10%;
     --popover-foreground: 220 17% 95%;
 
     --primary: 220 17% 85%;
@@ -76,11 +76,11 @@
     --input: 220 15% 18%;
     --ring: 220 17% 85%;
 
-    --sidebar-background: 220 15% 3%;
+    --sidebar-background: 220 15% 8%;
     --sidebar-foreground: 220 17% 90%;
     --sidebar-primary: 220 17% 85%;
     --sidebar-primary-foreground: 220 15% 8%;
-    --sidebar-accent: 220 15% 10%;
+    --sidebar-accent: 220 15% 12%;
     --sidebar-accent-foreground: 220 17% 85%;
     --sidebar-border: 220 15% 15%;
     --sidebar-ring: 220 17% 85%;
@@ -93,25 +93,25 @@
   }
 
   body {
-    @apply bg-gradient-to-br from-slate-50 via-slate-100 to-slate-200 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 text-foreground transition-colors duration-300;
+    @apply bg-white dark:bg-slate-900 text-foreground transition-colors duration-300;
     min-height: 100vh;
   }
 }
 
 @layer utilities {
-  .glass {
-    @apply bg-white/10 dark:bg-white/5 backdrop-blur-md border border-white/20 dark:border-white/10;
+  .modern-card {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300;
   }
   
-  .glass-strong {
-    @apply bg-white/20 dark:bg-white/10 backdrop-blur-lg border border-white/30 dark:border-white/20;
+  .modern-card-elevated {
+    @apply bg-white dark:bg-slate-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300;
   }
   
-  .glass-subtle {
-    @apply bg-white/5 dark:bg-white/[0.02] backdrop-blur-sm border border-white/10 dark:border-white/5;
+  .modern-header {
+    @apply bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700;
   }
   
   .gradient-text {
-    @apply bg-gradient-to-r from-slate-600 to-slate-800 dark:from-slate-300 dark:to-slate-100 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-300 dark:to-slate-100 bg-clip-text text-transparent;
   }
 }
