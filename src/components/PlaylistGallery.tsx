@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Moon, Sun, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+
 interface Playlist {
   id: string;
   name: string;
@@ -10,66 +11,79 @@ interface Playlist {
   description: string;
   trackCount: number;
 }
+
 interface PlaylistGalleryProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
 }
+
 const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   darkMode,
   toggleDarkMode
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
-  const playlists: Playlist[] = [{
-    id: '1',
-    name: 'Chill Vibes',
-    cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop',
-    spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0XUsuxWHRQd',
-    embedId: '37i9dQZF1DX0XUsuxWHRQd',
-    description: 'Relaxing beats for focus and calm',
-    trackCount: 42
-  }, {
-    id: '2',
-    name: 'Lo-Fi Beats',
-    cover: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=300&h=300&fit=crop',
-    spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
-    embedId: '37i9dQZF1DWWQRwui0ExPn',
-    description: 'Study and work soundscapes',
-    trackCount: 38
-  }, {
-    id: '3',
-    name: 'Indie Focus',
-    cover: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?w=300&h=300&fit=crop',
-    spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX2Nc3B70tvx0',
-    embedId: '37i9dQZF1DX2Nc3B70tvx0',
-    description: 'Independent artists you need to hear',
-    trackCount: 31
-  }, {
-    id: '4',
-    name: 'Acoustic Bliss',
-    cover: 'https://images.unsplash.com/photo-1500673922987-e212871fec22?w=300&h=300&fit=crop',
-    spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX1s9knjP51Oa',
-    embedId: '37i9dQZF1DX1s9knjP51Oa',
-    description: 'Stripped down, raw emotion',
-    trackCount: 28
-  }, {
-    id: '5',
-    name: 'Midnight Jazz',
-    cover: 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb?w=300&h=300&fit=crop',
-    spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0SM0LYsmbMT',
-    embedId: '37i9dQZF1DX0SM0LYsmbMT',
-    description: 'Smooth jazz for late nights',
-    trackCount: 35
-  }];
+
+  const playlists: Playlist[] = [
+    {
+      id: '1',
+      name: 'Chill Vibes',
+      cover: 'https://i.scdn.co/image/ab67706f00000003c6b0d9161b6e5c5e0c3e9c5c',
+      spotifyUrl: 'https://open.spotify.com/playlist/48esOySiahkRYrsCkCR3WR',
+      embedId: '48esOySiahkRYrsCkCR3WR',
+      description: 'Relaxing beats for focus and calm',
+      trackCount: 42
+    },
+    {
+      id: '2',
+      name: 'Lo-Fi Study',
+      cover: 'https://i.scdn.co/image/ab67706f00000003c13d2b1f6b5c4e7d8f9a1b2c',
+      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
+      embedId: '37i9dQZF1DWWQRwui0ExPn',
+      description: 'Study and work soundscapes',
+      trackCount: 38
+    },
+    {
+      id: '3',
+      name: 'Indie Discoveries',
+      cover: 'https://i.scdn.co/image/ab67706f00000003a1b2c3d4e5f6g7h8i9j0k1l2',
+      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX2Nc3B70tvx0',
+      embedId: '37i9dQZF1DX2Nc3B70tvx0',
+      description: 'Independent artists you need to hear',
+      trackCount: 31
+    },
+    {
+      id: '4',
+      name: 'Acoustic Sessions',
+      cover: 'https://i.scdn.co/image/ab67706f00000003b2c3d4e5f6g7h8i9j0k1l2m3',
+      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX1s9knjP51Oa',
+      embedId: '37i9dQZF1DX1s9knjP51Oa',
+      description: 'Stripped down, raw emotion',
+      trackCount: 28
+    },
+    {
+      id: '5',
+      name: 'Late Night Jazz',
+      cover: 'https://i.scdn.co/image/ab67706f00000003c3d4e5f6g7h8i9j0k1l2m3n4',
+      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0SM0LYsmbMT',
+      embedId: '37i9dQZF1DX0SM0LYsmbMT',
+      description: 'Smooth jazz for late nights',
+      trackCount: 35
+    }
+  ];
+
   const nextPlaylist = () => {
     setCurrentIndex(prev => (prev + 1) % playlists.length);
   };
+
   const prevPlaylist = () => {
     setCurrentIndex(prev => (prev - 1 + playlists.length) % playlists.length);
   };
+
   const handlePlaylistClick = (playlist: Playlist) => {
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
+
   const getVisiblePlaylists = () => {
     const visible = [];
     for (let i = -2; i <= 2; i++) {
@@ -81,7 +95,9 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     }
     return visible;
   };
-  return <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
+
+  return (
+    <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
       {/* Floating Header */}
       <header className="fixed top-4 left-4 right-4 z-50">
         <div className="max-w-4xl mx-auto">
@@ -121,18 +137,31 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
 
           {/* Carousel */}
           <div className="flex justify-center items-center h-[500px] overflow-hidden px-20 perspective-1000">
-            {getVisiblePlaylists().map(({
-              playlist,
-              offset
-            }) => <div key={playlist.id} className={`absolute transition-all duration-700 ease-out cursor-pointer ${offset === 0 ? 'z-20' : offset === -1 || offset === 1 ? 'z-10' : 'z-0'}`} style={{
-              transform: `translateX(${offset * 180}px) translateY(${Math.abs(offset) * 25}px) rotateY(${offset * -20}deg) rotateZ(${offset * 4}deg) skewY(${offset * 2}deg) scale(${offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.8 : 0.65})`,
-              opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
-              filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
-            }} onClick={() => handlePlaylistClick(playlist)}>
+            {getVisiblePlaylists().map(({ playlist, offset }) => (
+              <div
+                key={playlist.id}
+                className={`absolute transition-all duration-700 ease-out cursor-pointer ${
+                  offset === 0 ? 'z-20' : offset === -1 || offset === 1 ? 'z-10' : 'z-0'
+                }`}
+                style={{
+                  transform: `translateX(${offset * 180}px) translateY(${Math.abs(offset) * 25}px) rotateY(${offset * -20}deg) rotateZ(${offset * 4}deg) skewY(${offset * 2}deg) scale(${offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.8 : 0.65})`,
+                  opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
+                  filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
+                }}
+                onClick={() => handlePlaylistClick(playlist)}
+              >
                 <div className="group relative preserve-3d">
                   <div className={`progressive-blur rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 ${darkMode ? 'border border-neutral-600/30' : 'border border-white/30'}`}>
                     <div className="relative overflow-hidden rounded-2xl mb-6">
-                      <img src={playlist.cover} alt={playlist.name} className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <img
+                        src={playlist.cover}
+                        alt={playlist.name}
+                        className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          // Fallback to a default image if Spotify image fails to load
+                          e.currentTarget.src = `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80&auto=format&crop=entropy&cs=tinysrgb&sig=${playlist.id}`;
+                        }}
+                      />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
                         <div className={`backdrop-blur-sm rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 ${darkMode ? 'bg-neutral-800/90' : 'bg-white/90'}`}>
                           <Play className={`w-8 h-8 ${darkMode ? 'text-neutral-100' : 'text-slate-900'}`} />
@@ -152,16 +181,25 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                     </div>
                   </div>
                 </div>
-              </div>)}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Embedded Spotify Player */}
-        {selectedPlaylist && <div className="max-w-4xl mx-auto px-8 animate-fade-in">
+        {selectedPlaylist && (
+          <div className="max-w-4xl mx-auto px-8 animate-fade-in">
             <div className={`backdrop-blur-md rounded-3xl shadow-2xl border overflow-hidden transition-colors duration-300 ${darkMode ? 'bg-neutral-900/95 border-neutral-700/30' : 'bg-white/95 border-white/30'}`}>
               <div className={`p-10 border-b transition-colors duration-300 ${darkMode ? 'border-neutral-700/50' : 'border-slate-100/50'}`}>
                 <div className="flex items-center space-x-6">
-                  <img src={selectedPlaylist.cover} alt={selectedPlaylist.name} className="w-20 h-20 rounded-2xl object-cover shadow-lg" />
+                  <img
+                    src={selectedPlaylist.cover}
+                    alt={selectedPlaylist.name}
+                    className="w-20 h-20 rounded-2xl object-cover shadow-lg"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80&auto=format&crop=entropy&cs=tinysrgb&sig=${selectedPlaylist.id}`;
+                    }}
+                  />
                   <div>
                     <h2 className={`text-3xl font-medium tracking-tight leading-tight mb-2 transition-colors duration-300 ${darkMode ? 'text-neutral-100' : 'text-slate-900'}`}>
                       {selectedPlaylist.name}
@@ -173,10 +211,18 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                 </div>
               </div>
               <div className="p-0">
-                <iframe src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.embedId}?utm_source=generator&theme=${darkMode ? '1' : '0'}`} width="100%" height="400" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
+                <iframe
+                  src={`https://open.spotify.com/embed/playlist/${selectedPlaylist.embedId}?utm_source=generator&theme=${darkMode ? '1' : '0'}`}
+                  width="100%"
+                  height="400"
+                  frameBorder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
               </div>
             </div>
-          </div>}
+          </div>
+        )}
       </main>
 
       {/* Footer */}
@@ -187,6 +233,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
           </p>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default PlaylistGallery;
