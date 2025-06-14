@@ -7,6 +7,7 @@ import FloatingHeader from '@/components/FloatingHeader';
 import CarouselView from '@/components/CarouselView';
 import CategoryFilterChips from '@/components/CategoryFilterChips';
 import PlaylistPlayer from '@/components/PlaylistPlayer';
+import { useToast } from '@/hooks/use-toast';
 
 interface PlaylistGalleryProps {
   darkMode: boolean;
@@ -23,9 +24,21 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   const [selectedPlaylist, setSelectedPlaylist] = useState<CategorizedPlaylist | null>(null);
   const [sortMode, setSortMode] = useState<SortMode>('carousel');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { toast } = useToast();
   
   const spotifyUserId = 'kcin531';
   const { data: playlists = [], isLoading, error } = useSpotifyPlaylists(spotifyUserId);
+
+  // Show error toast when there's an error
+  React.useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error loading playlists",
+        description: "Please check your connection and try again later.",
+        variant: "destructive"
+      });
+    }
+  }, [error, toast]);
 
   const categorizedPlaylists = categorizePlaylists(playlists);
   const groupedPlaylists = groupPlaylistsByCategory(categorizedPlaylists);
@@ -66,18 +79,6 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     setSelectedPlaylist(selectedPlaylist?.id === playlist.id ? null : playlist);
   };
 
-  React.useEffect(() => {
-    if (playlists.length > 0) {
-      console.log('=== COMPLETE FRONTEND PLAYLIST ANALYSIS ===');
-      console.log('Total playlists received:', playlists.length);
-      console.log('All playlist names:');
-      playlists.forEach((playlist, index) => {
-        console.log(`${index + 1}. "${playlist.name}"`);
-      });
-      console.log('=== END COMPLETE FRONTEND ANALYSIS ===');
-    }
-  }, [playlists]);
-
   if (isLoading) {
     return (
       <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
@@ -94,8 +95,16 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     return (
       <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
         <div className="flex items-center justify-center h-screen">
-          <div className={`text-2xl font-light ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
-            Error loading playlists. Please try again later.
+          <div className="text-center">
+            <div className={`text-2xl font-light mb-4 ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
+              Unable to load playlists
+            </div>
+            <button 
+              onClick={() => window.location.reload()} 
+              className={`px-6 py-2 rounded-lg transition-colors ${darkMode ? 'bg-neutral-700 hover:bg-neutral-600 text-neutral-200' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
+            >
+              Try Again
+            </button>
           </div>
         </div>
       </div>

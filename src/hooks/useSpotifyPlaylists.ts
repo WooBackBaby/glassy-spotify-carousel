@@ -17,24 +17,45 @@ interface SpotifyPlaylistsResponse {
 }
 
 const fetchSpotifyPlaylists = async (userId: string): Promise<Playlist[]> => {
-  const { data, error } = await supabase.functions.invoke('spotify-playlists', {
-    body: { userId }
-  });
-
-  if (error) {
-    console.error('Error fetching playlists:', error);
-    throw new Error('Failed to fetch playlists');
+  // Client-side validation
+  if (!userId || typeof userId !== 'string' || userId.trim().length === 0) {
+    throw new Error('Invalid user ID provided');
   }
 
-  return data.playlists || [];
+  try {
+    const { data, error } = await supabase.functions.invoke('spotify-playlists', {
+      body: { userId: userId.trim() }
+    });
+
+    if (error) {
+      console.error('Supabase function error:', error);
+      throw new Error('Failed to fetch playlists');
+    }
+
+    if (!data || !Array.isArray(data.playlists)) {
+      throw new Error('Invalid response format');
+    }
+
+    return data.playlists;
+  } catch (error) {
+    console.error('Error in fetchSpotifyPlaylists:', error);
+    throw error;
+  }
 };
 
 export const useSpotifyPlaylists = (userId: string) => {
   return useQuery({
     queryKey: ['spotify-playlists', userId],
     queryFn: () => fetchSpotifyPlaylists(userId),
-    enabled: !!userId,
+    enabled: !!userId && typeof userId === 'string' && userId.trim().length > 0,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    retry: 2
+    retry: (failureCount, error) => {
+      // Don't retry on client errors (400-499)
+      if (error.message.includes('Invalid user ID') || error.message.includes('User not found')) {
+        return false;
+      }
+      return failureCount < 2;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
   });
 };

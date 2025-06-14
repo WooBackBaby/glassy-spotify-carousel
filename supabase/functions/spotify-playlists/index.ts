@@ -6,6 +6,27 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// Input validation function
+function validateUserId(userId: string): boolean {
+  // Check if userId is a non-empty string with reasonable length
+  if (!userId || typeof userId !== 'string') {
+    return false;
+  }
+  
+  // Allow alphanumeric characters, underscores, hyphens, and dots
+  const validUserIdPattern = /^[a-zA-Z0-9._-]{1,50}$/;
+  return validUserIdPattern.test(userId);
+}
+
+// Error logging function
+function logError(error: any, context: string) {
+  console.error(`[${context}] Error:`, {
+    message: error.message,
+    stack: error.stack,
+    timestamp: new Date().toISOString()
+  });
+}
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -13,11 +34,14 @@ serve(async (req) => {
   }
 
   try {
-    const { userId } = await req.json()
+    const body = await req.json();
+    const { userId } = body;
     
-    if (!userId) {
+    // Validate userId
+    if (!validateUserId(userId)) {
+      logError(new Error(`Invalid userId format: ${userId}`), 'VALIDATION');
       return new Response(
-        JSON.stringify({ error: 'User ID is required' }),
+        JSON.stringify({ error: 'Invalid user ID format' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -27,8 +51,9 @@ serve(async (req) => {
     const clientSecret = Deno.env.get('SPOTIFY_CLIENT_SECRET')
 
     if (!clientId || !clientSecret) {
+      logError(new Error('Missing Spotify credentials'), 'CONFIG');
       return new Response(
-        JSON.stringify({ error: 'Spotify credentials not configured' }),
+        JSON.stringify({ error: 'Service temporarily unavailable' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       )
     }
@@ -43,19 +68,47 @@ serve(async (req) => {
       body: 'grant_type=client_credentials'
     })
 
+    if (!tokenResponse.ok) {
+      logError(new Error(`Spotify token request failed: ${tokenResponse.status}`), 'SPOTIFY_AUTH');
+      return new Response(
+        JSON.stringify({ error: 'Authentication failed' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     const tokenData = await tokenResponse.json()
     const accessToken = tokenData.access_token
 
     // Fetch all user's public playlists with pagination
     let allPlaylists: any[] = []
-    let nextUrl = `https://api.spotify.com/v1/users/${userId}/playlists?limit=50`
+    let nextUrl = `https://api.spotify.com/v1/users/${encodeURIComponent(userId)}/playlists?limit=50`
+    let requestCount = 0;
+    const maxRequests = 10; // Prevent infinite loops
     
-    while (nextUrl) {
+    while (nextUrl && requestCount < maxRequests) {
+      requestCount++;
+      
       const playlistsResponse = await fetch(nextUrl, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
         }
       })
+
+      if (!playlistsResponse.ok) {
+        if (playlistsResponse.status === 404) {
+          logError(new Error(`User not found: ${userId}`), 'SPOTIFY_API');
+          return new Response(
+            JSON.stringify({ error: 'User not found' }),
+            { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          )
+        }
+        
+        logError(new Error(`Spotify API error: ${playlistsResponse.status}`), 'SPOTIFY_API');
+        return new Response(
+          JSON.stringify({ error: 'Failed to fetch playlists' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
 
       const playlistsData = await playlistsResponse.json()
       
@@ -67,29 +120,29 @@ serve(async (req) => {
       nextUrl = playlistsData.next
     }
 
-    console.log(`Fetched ${allPlaylists.length} total playlists for user ${userId}`)
-    
-    // Log ALL playlist titles for analysis
-    console.log('=== COMPLETE PLAYLIST ANALYSIS ===')
-    allPlaylists.forEach((playlist: any, index: number) => {
-      console.log(`${index + 1}. "${playlist.name}"`)
-    })
-    console.log('=== END COMPLETE ANALYSIS ===')
+    console.log(`Successfully fetched ${allPlaylists.length} playlists for user ${userId}`)
 
     // Transform the data to match our frontend format
     const transformedPlaylists = allPlaylists
-      ?.filter((playlist: any) => playlist.public && playlist.images.length > 0)
+      ?.filter((playlist: any) => {
+        // Additional safety checks
+        return playlist && 
+               playlist.public && 
+               playlist.images && 
+               Array.isArray(playlist.images) && 
+               playlist.images.length > 0
+      })
       ?.map((playlist: any) => ({
         id: playlist.id,
-        name: playlist.name,
+        name: playlist.name || 'Untitled Playlist',
         cover: playlist.images[0]?.url || '',
-        spotifyUrl: playlist.external_urls.spotify,
+        spotifyUrl: playlist.external_urls?.spotify || '',
         embedId: playlist.id,
         description: playlist.description || 'Curated playlist',
-        trackCount: playlist.tracks.total
+        trackCount: playlist.tracks?.total || 0
       })) || []
 
-    console.log(`Returning ${transformedPlaylists.length} public playlists with images`)
+    console.log(`Returning ${transformedPlaylists.length} valid playlists`)
 
     return new Response(
       JSON.stringify({ playlists: transformedPlaylists }),
@@ -97,9 +150,9 @@ serve(async (req) => {
     )
 
   } catch (error) {
-    console.error('Error fetching Spotify playlists:', error)
+    logError(error, 'GENERAL');
     return new Response(
-      JSON.stringify({ error: 'Failed to fetch playlists' }),
+      JSON.stringify({ error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   }
