@@ -126,7 +126,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
               filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
             }} onClick={() => handlePlaylistClick(playlist)}>
                   <div className="group relative preserve-3d">
-                    <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 border border-white/30 hover:bg-white">
+                    <div className="progressive-blur rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 border border-white/30">
                       <div className="relative overflow-hidden rounded-2xl mb-6">
                         <img src={playlist.cover} alt={playlist.name} className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
