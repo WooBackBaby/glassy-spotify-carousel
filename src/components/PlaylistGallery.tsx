@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Moon, Sun, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useSpotifyPlaylists } from '@/hooks/useSpotifyPlaylists';
 
 interface Playlist {
   id: string;
@@ -10,12 +11,6 @@ interface Playlist {
   embedId: string;
   description: string;
   trackCount: number;
-}
-
-interface SpotifyPlaylistData {
-  title: string;
-  thumbnail_url: string;
-  author_name: string;
 }
 
 interface PlaylistGalleryProps {
@@ -29,79 +24,11 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
-  const [playlists, setPlaylists] = useState<Playlist[]>([
-    {
-      id: '1',
-      name: 'Loading...',
-      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
-      spotifyUrl: 'https://open.spotify.com/playlist/48esOySiahkRYrsCkCR3WR',
-      embedId: '48esOySiahkRYrsCkCR3WR',
-      description: 'Relaxing beats for focus and calm',
-      trackCount: 42
-    },
-    {
-      id: '2',
-      name: 'Loading...',
-      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
-      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
-      embedId: '37i9dQZF1DWWQRwui0ExPn',
-      description: 'Study and work soundscapes',
-      trackCount: 38
-    },
-    {
-      id: '3',
-      name: 'Loading...',
-      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
-      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX2Nc3B70tvx0',
-      embedId: '37i9dQZF1DX2Nc3B70tvx0',
-      description: 'Independent artists you need to hear',
-      trackCount: 31
-    },
-    {
-      id: '4',
-      name: 'Loading...',
-      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
-      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX1s9knjP51Oa',
-      embedId: '37i9dQZF1DX1s9knjP51Oa',
-      description: 'Stripped down, raw emotion',
-      trackCount: 28
-    },
-    {
-      id: '5',
-      name: 'Loading...',
-      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
-      spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0SM0LYsmbMT',
-      embedId: '37i9dQZF1DX0SM0LYsmbMT',
-      description: 'Smooth jazz for late nights',
-      trackCount: 35
-    }
-  ]);
-
-  useEffect(() => {
-    const fetchPlaylistData = async () => {
-      const updatedPlaylists = await Promise.all(
-        playlists.map(async (playlist) => {
-          try {
-            const response = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(playlist.spotifyUrl)}`);
-            if (response.ok) {
-              const data: SpotifyPlaylistData = await response.json();
-              return {
-                ...playlist,
-                name: data.title || playlist.name,
-                cover: data.thumbnail_url || playlist.cover
-              };
-            }
-          } catch (error) {
-            console.log('Failed to fetch playlist data for:', playlist.spotifyUrl);
-          }
-          return playlist;
-        })
-      );
-      setPlaylists(updatedPlaylists);
-    };
-
-    fetchPlaylistData();
-  }, []);
+  
+  // Extract user ID from the Spotify profile URL
+  const spotifyUserId = 'kcin531'; // From the URL you provided
+  
+  const { data: playlists = [], isLoading, error } = useSpotifyPlaylists(spotifyUserId);
 
   const nextPlaylist = () => {
     setCurrentIndex(prev => (prev + 1) % playlists.length);
@@ -116,6 +43,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
   };
 
   const getVisiblePlaylists = () => {
+    if (playlists.length === 0) return [];
+    
     const visible = [];
     for (let i = -2; i <= 2; i++) {
       const index = (currentIndex + i + playlists.length) % playlists.length;
@@ -126,6 +55,42 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     }
     return visible;
   };
+
+  if (isLoading) {
+    return (
+      <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
+        <div className="flex items-center justify-center h-screen">
+          <div className={`text-2xl font-light ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
+            Loading playlists...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
+        <div className="flex items-center justify-center h-screen">
+          <div className={`text-2xl font-light ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
+            Error loading playlists. Please try again later.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (playlists.length === 0) {
+    return (
+      <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
+        <div className="flex items-center justify-center h-screen">
+          <div className={`text-2xl font-light ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
+            No public playlists found for this user.
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900' : 'bg-gradient-to-br from-slate-50 via-white to-slate-100'}`}>
@@ -188,9 +153,6 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                         src={playlist.cover}
                         alt={playlist.name}
                         className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                        onError={(e) => {
-                          e.currentTarget.src = `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80&auto=format&crop=entropy&cs=tinysrgb&sig=${playlist.id}`;
-                        }}
                       />
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
                         <div className={`backdrop-blur-sm rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 ${darkMode ? 'bg-neutral-800/90' : 'bg-white/90'}`}>
@@ -226,9 +188,6 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                     src={selectedPlaylist.cover}
                     alt={selectedPlaylist.name}
                     className="w-20 h-20 rounded-2xl object-cover shadow-lg"
-                    onError={(e) => {
-                      e.currentTarget.src = `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80&auto=format&crop=entropy&cs=tinysrgb&sig=${selectedPlaylist.id}`;
-                    }}
                   />
                   <div>
                     <h2 className={`text-3xl font-medium tracking-tight leading-tight mb-2 transition-colors duration-300 ${darkMode ? 'text-neutral-100' : 'text-slate-900'}`}>
