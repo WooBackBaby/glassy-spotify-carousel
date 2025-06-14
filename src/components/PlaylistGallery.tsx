@@ -93,7 +93,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                   A collection of handpicked playlists
                 </p>
               </div>
-              <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-slate-100/50 transition-all duration-300 w-12 h-12 backdrop-blur-sm">
+              <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full transition-all duration-300 w-12 h-12 backdrop-blur-sm bg-gray-400 hover:bg-gray-300">
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
             </div>
