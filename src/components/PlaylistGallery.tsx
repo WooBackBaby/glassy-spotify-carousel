@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Moon, Sun, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +12,12 @@ interface Playlist {
   trackCount: number;
 }
 
+interface SpotifyPlaylistData {
+  title: string;
+  thumbnail_url: string;
+  author_name: string;
+}
+
 interface PlaylistGalleryProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
@@ -23,12 +29,11 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedPlaylist, setSelectedPlaylist] = useState<Playlist | null>(null);
-
-  const playlists: Playlist[] = [
+  const [playlists, setPlaylists] = useState<Playlist[]>([
     {
       id: '1',
-      name: 'Chill Vibes',
-      cover: 'https://i.scdn.co/image/ab67706f00000003c6b0d9161b6e5c5e0c3e9c5c',
+      name: 'Loading...',
+      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
       spotifyUrl: 'https://open.spotify.com/playlist/48esOySiahkRYrsCkCR3WR',
       embedId: '48esOySiahkRYrsCkCR3WR',
       description: 'Relaxing beats for focus and calm',
@@ -36,8 +41,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     },
     {
       id: '2',
-      name: 'Lo-Fi Study',
-      cover: 'https://i.scdn.co/image/ab67706f00000003c13d2b1f6b5c4e7d8f9a1b2c',
+      name: 'Loading...',
+      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
       spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DWWQRwui0ExPn',
       embedId: '37i9dQZF1DWWQRwui0ExPn',
       description: 'Study and work soundscapes',
@@ -45,8 +50,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     },
     {
       id: '3',
-      name: 'Indie Discoveries',
-      cover: 'https://i.scdn.co/image/ab67706f00000003a1b2c3d4e5f6g7h8i9j0k1l2',
+      name: 'Loading...',
+      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
       spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX2Nc3B70tvx0',
       embedId: '37i9dQZF1DX2Nc3B70tvx0',
       description: 'Independent artists you need to hear',
@@ -54,8 +59,8 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     },
     {
       id: '4',
-      name: 'Acoustic Sessions',
-      cover: 'https://i.scdn.co/image/ab67706f00000003b2c3d4e5f6g7h8i9j0k1l2m3',
+      name: 'Loading...',
+      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
       spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX1s9knjP51Oa',
       embedId: '37i9dQZF1DX1s9knjP51Oa',
       description: 'Stripped down, raw emotion',
@@ -63,14 +68,40 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
     },
     {
       id: '5',
-      name: 'Late Night Jazz',
-      cover: 'https://i.scdn.co/image/ab67706f00000003c3d4e5f6g7h8i9j0k1l2m3n4',
+      name: 'Loading...',
+      cover: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80',
       spotifyUrl: 'https://open.spotify.com/playlist/37i9dQZF1DX0SM0LYsmbMT',
       embedId: '37i9dQZF1DX0SM0LYsmbMT',
       description: 'Smooth jazz for late nights',
       trackCount: 35
     }
-  ];
+  ]);
+
+  useEffect(() => {
+    const fetchPlaylistData = async () => {
+      const updatedPlaylists = await Promise.all(
+        playlists.map(async (playlist) => {
+          try {
+            const response = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(playlist.spotifyUrl)}`);
+            if (response.ok) {
+              const data: SpotifyPlaylistData = await response.json();
+              return {
+                ...playlist,
+                name: data.title || playlist.name,
+                cover: data.thumbnail_url || playlist.cover
+              };
+            }
+          } catch (error) {
+            console.log('Failed to fetch playlist data for:', playlist.spotifyUrl);
+          }
+          return playlist;
+        })
+      );
+      setPlaylists(updatedPlaylists);
+    };
+
+    fetchPlaylistData();
+  }, []);
 
   const nextPlaylist = () => {
     setCurrentIndex(prev => (prev + 1) % playlists.length);
@@ -101,12 +132,12 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       {/* Floating Header */}
       <header className="fixed top-4 left-4 right-4 z-50">
         <div className="max-w-4xl mx-auto">
-          <div className={`backdrop-blur-xl border shadow-2xl px-6 py-3 rounded-full transition-colors duration-300 max-w-[800px] h-[52px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_10px_rgba(34,197,94,0.15)] ring-1 ring-green-500/20' : 'bg-white/80 border-white/20 shadow-[0_0_10px_rgba(34,197,94,0.1)] ring-1 ring-green-400/20'}`} style={{
-            boxShadow: darkMode ? '0 0 15px rgba(34, 197, 94, 0.2), 0 0 30px rgba(34, 197, 94, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 0 15px rgba(34, 197, 94, 0.15), 0 0 30px rgba(34, 197, 94, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          <div className={`backdrop-blur-xl border shadow-2xl px-6 py-3 rounded-full transition-colors duration-300 max-w-[800px] h-[52px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_5px_rgba(34,197,94,0.075)] ring-1 ring-green-500/10' : 'bg-white/80 border-white/20 shadow-[0_0_5px_rgba(34,197,94,0.05)] ring-1 ring-green-400/10'}`} style={{
+            boxShadow: darkMode ? '0 0 7.5px rgba(34, 197, 94, 0.1), 0 0 15px rgba(34, 197, 94, 0.025), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 0 7.5px rgba(34, 197, 94, 0.075), 0 0 15px rgba(34, 197, 94, 0.025), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
           }}>
             <div className="flex items-center space-x-3">
               <div className={`w-2 h-2 rounded-full ${darkMode ? 'bg-green-400' : 'bg-green-500'}`} style={{
-                boxShadow: darkMode ? '0 0 5px rgba(34, 197, 94, 0.4)' : '0 0 5px rgba(34, 197, 94, 0.3)'
+                boxShadow: darkMode ? '0 0 2.5px rgba(34, 197, 94, 0.2)' : '0 0 2.5px rgba(34, 197, 94, 0.15)'
               }}></div>
               <div>
                 <h1 className={`text-sm font-semibold ${darkMode ? 'text-green-300' : 'text-green-600'}`}>The Pantry</h1>
@@ -158,7 +189,6 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
                         alt={playlist.name}
                         className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110"
                         onError={(e) => {
-                          // Fallback to a default image if Spotify image fails to load
                           e.currentTarget.src = `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=300&h=300&fit=crop&q=80&auto=format&crop=entropy&cs=tinysrgb&sig=${playlist.id}`;
                         }}
                       />
