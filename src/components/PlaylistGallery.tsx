@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Twitter } from 'lucide-react';
+
 interface PlaylistGalleryProps {
   darkMode: boolean;
   toggleDarkMode: () => void;
@@ -165,7 +166,7 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
               <span className={`text-sm font-medium ${darkMode ? 'text-neutral-300' : 'text-slate-600'}`}>
                 Follow us:
               </span>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className={`p-2 rounded-full transition-colors duration-200 ${darkMode ? 'bg-neutral-800/60 hover:bg-neutral-700/80 text-neutral-300 hover:text-white border border-neutral-700/30' : 'bg-white/60 hover:bg-white/80 text-slate-600 hover:text-slate-800 border border-white/30'}`}>
+              <a href="https://x.com/dsgndre" target="_blank" rel="noopener noreferrer" className={`p-2 rounded-full transition-colors duration-200 ${darkMode ? 'bg-neutral-800/60 hover:bg-neutral-700/80 text-neutral-300 hover:text-white border border-neutral-700/30' : 'bg-white/60 hover:bg-white/80 text-slate-600 hover:text-slate-800 border border-white/30'}`}>
                 <Twitter size={20} />
               </a>
             </div>
