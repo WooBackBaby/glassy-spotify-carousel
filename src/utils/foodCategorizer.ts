@@ -1,4 +1,3 @@
-
 export interface FoodCategory {
   name: string;
   emoji: string;
@@ -36,7 +35,7 @@ export const FOOD_CATEGORIES: FoodCategory[] = [
     name: 'Sweets & Desserts',
     emoji: '🍰',
     keywords: [
-      'gummy worms', 'toffee', 'caramel', 'pudding', 'devil\'s food cake', 
+      'gummy worms', 'toffee', 'caramel', 'pudding', "devil’s food cake", 
       'butterscotch', 'jelly beans', 'dulce de leche', 'box of chocolates'
     ]
   },
@@ -45,7 +44,32 @@ export const FOOD_CATEGORIES: FoodCategory[] = [
     emoji: '🥤',
     keywords: [
       'caipirinha', 'amarula', 'lemonade', 'dandelion wine', 'sarsaparilla', 
-      'cocoa', 'champagne'
+      'cocoa', 'champagne', 'coffee'
+    ]
+  },
+  {
+    name: 'Sandwiches',
+    emoji: '🥪',
+    keywords: [
+      'bacon, egg & cheese', 'patty melt', 'sloppy joe', 'torta', 
+      'cheeseburger', 'pulled pork', 'bauru', 'reuben', 'croque monsieur',
+      'blt', 'pb&j', 'grilled cheese'
+    ]
+  },
+  {
+    name: 'Sauces & Condiments',
+    emoji: '🥫',
+    keywords: [
+      'bechamel', 'worcestershire', 'peri peri', 'pico de gallo', 
+      'buttercream', 'mother sauce', 'hollandaze', 'chimichurri', 
+      'honey mustard', 'ganache', 'apricot jam', 'cranberry sauce', 'gravy'
+    ]
+  },
+  {
+    name: 'Meats & Main Dishes',
+    emoji: '🥩',
+    keywords: [
+      'a little ham and eggs'
     ]
   },
   {
