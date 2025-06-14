@@ -62,7 +62,7 @@ const FloatingHeader: React.FC<FloatingHeaderProps> = ({
           <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className={`rounded-full transition-all duration-300 backdrop-blur-sm text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8 ${darkMode ? 'bg-neutral-700/50 hover:bg-neutral-600/50 text-green-300 border border-green-500/20' : 'bg-gray-400/50 hover:bg-gray-300/50 text-green-600 border border-green-400/20'}`}>
+                <Button variant="ghost" size="sm" className={`rounded-full transition-all duration-300 backdrop-blur-sm text-xs sm:text-sm px-2 sm:px-3 h-7 sm:h-8 ${darkMode ? 'bg-neutral-700/50 hover:bg-neutral-600/50 text-green-300 border border-green-500/20' : 'bg-white/90 hover:bg-white text-green-600 border border-green-400/20'}`}>
                   <span className="hidden sm:inline">{getSortModeLabel()}</span>
                   <span className="sm:hidden">{getSortModeLabelShort()}</span>
                 </Button>
@@ -80,7 +80,7 @@ const FloatingHeader: React.FC<FloatingHeaderProps> = ({
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className={`rounded-full transition-all duration-300 w-7 h-7 sm:w-10 sm:h-10 backdrop-blur-sm ${darkMode ? 'bg-neutral-700/50 hover:bg-neutral-600/50 text-green-300 border border-green-500/20' : 'bg-gray-400/50 hover:bg-gray-300/50 text-green-600 border border-green-400/20'}`}>
+            <Button variant="ghost" size="icon" onClick={toggleDarkMode} className={`rounded-full transition-all duration-300 w-7 h-7 sm:w-10 sm:h-10 backdrop-blur-sm ${darkMode ? 'bg-neutral-700/50 hover:bg-neutral-600/50 text-green-300 border border-green-500/20' : 'bg-white/90 hover:bg-white text-green-600 border border-green-400/20'}`}>
               {darkMode ? <Sun className="h-3 w-3 sm:h-4 sm:w-4" /> : <Moon className="h-3 w-3 sm:h-4 sm:w-4" />}
             </Button>
           </div>
