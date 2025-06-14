@@ -85,12 +85,12 @@ const PlaylistGallery: React.FC<PlaylistGalleryProps> = ({
       {/* Floating Header */}
       <header className="fixed top-4 left-4 right-4 z-50">
         <div className="max-w-4xl mx-auto">
-          <div className={`backdrop-blur-xl border shadow-2xl px-6 py-3 rounded-full transition-colors duration-300 max-w-[800px] h-[52px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_20px_rgba(34,197,94,0.3)] ring-1 ring-green-500/20' : 'bg-white/80 border-white/20 shadow-[0_0_20px_rgba(34,197,94,0.2)] ring-1 ring-green-400/20'}`} style={{
-            boxShadow: darkMode ? '0 0 30px rgba(34, 197, 94, 0.4), 0 0 60px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 0 30px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+          <div className={`backdrop-blur-xl border shadow-2xl px-6 py-3 rounded-full transition-colors duration-300 max-w-[800px] h-[52px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_10px_rgba(34,197,94,0.15)] ring-1 ring-green-500/20' : 'bg-white/80 border-white/20 shadow-[0_0_10px_rgba(34,197,94,0.1)] ring-1 ring-green-400/20'}`} style={{
+            boxShadow: darkMode ? '0 0 15px rgba(34, 197, 94, 0.2), 0 0 30px rgba(34, 197, 94, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 0 15px rgba(34, 197, 94, 0.15), 0 0 30px rgba(34, 197, 94, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
           }}>
             <div className="flex items-center space-x-3">
               <div className={`w-2 h-2 rounded-full ${darkMode ? 'bg-green-400' : 'bg-green-500'}`} style={{
-                boxShadow: darkMode ? '0 0 10px rgba(34, 197, 94, 0.8)' : '0 0 10px rgba(34, 197, 94, 0.6)'
+                boxShadow: darkMode ? '0 0 5px rgba(34, 197, 94, 0.4)' : '0 0 5px rgba(34, 197, 94, 0.3)'
               }}></div>
               <div>
                 <h1 className={`text-sm font-semibold ${darkMode ? 'text-green-300' : 'text-green-600'}`}>The Pantry</h1>
