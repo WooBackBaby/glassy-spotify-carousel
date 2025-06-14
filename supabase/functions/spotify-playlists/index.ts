@@ -46,19 +46,33 @@ serve(async (req) => {
     const tokenData = await tokenResponse.json()
     const accessToken = tokenData.access_token
 
-    // Fetch user's public playlists
-    const playlistsResponse = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists?limit=50`, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
-    })
+    // Fetch all user's public playlists with pagination
+    let allPlaylists: any[] = []
+    let nextUrl = `https://api.spotify.com/v1/users/${userId}/playlists?limit=50`
+    
+    while (nextUrl) {
+      const playlistsResponse = await fetch(nextUrl, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
 
-    const playlistsData = await playlistsResponse.json()
+      const playlistsData = await playlistsResponse.json()
+      
+      if (playlistsData.items) {
+        allPlaylists = allPlaylists.concat(playlistsData.items)
+      }
+      
+      // Check if there are more pages
+      nextUrl = playlistsData.next
+    }
+
+    console.log(`Fetched ${allPlaylists.length} total playlists for user ${userId}`)
 
     // Transform the data to match our frontend format
-    const transformedPlaylists = playlistsData.items
+    const transformedPlaylists = allPlaylists
       ?.filter((playlist: any) => playlist.public && playlist.images.length > 0)
-      ?.map((playlist: any, index: number) => ({
+      ?.map((playlist: any) => ({
         id: playlist.id,
         name: playlist.name,
         cover: playlist.images[0]?.url || '',
@@ -67,6 +81,8 @@ serve(async (req) => {
         description: playlist.description || 'Curated playlist',
         trackCount: playlist.tracks.total
       })) || []
+
+    console.log(`Returning ${transformedPlaylists.length} public playlists with images`)
 
     return new Response(
       JSON.stringify({ playlists: transformedPlaylists }),
