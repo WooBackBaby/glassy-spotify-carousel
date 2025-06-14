@@ -139,4 +139,27 @@
   .backdrop-blur-3xl {
     backdrop-filter: blur(64px);
   }
+
+  .progressive-blur {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0.6) 25%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0.6) 75%,
+      rgba(255, 255, 255, 0.8) 100%
+    );
+    backdrop-filter: blur(20px) saturate(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .progressive-blur:hover {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.7) 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.7) 75%,
+      rgba(255, 255, 255, 0.9) 100%
+    );
+    backdrop-filter: blur(25px) saturate(1.3);
+  }
 }
