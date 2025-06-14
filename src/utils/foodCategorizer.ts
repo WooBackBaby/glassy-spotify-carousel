@@ -7,62 +7,52 @@ export interface FoodCategory {
 
 export const FOOD_CATEGORIES: FoodCategory[] = [
   {
-    name: 'Breads',
+    name: 'Breads & Baked Goods',
     emoji: '🍞',
     keywords: [
-      'pumpernickel', 'focaccia', 'sourdough', 'baguette', 'ciabatta', 'rye', 'wheat',
-      'bagel', 'croissant', 'brioche', 'challah', 'naan', 'pita', 'tortilla',
-      'bread', 'roll', 'loaf', 'toast'
+      'biscuits', 'marbled rye', 'hardtack', 'pumpernickel', 'focaccia', 
+      'sourdough', 'beignets', 'glazed donut'
     ]
   },
   {
     name: 'Vegetables',
     emoji: '🥬',
     keywords: [
-      'green beans', 'squash', 'carrots', 'broccoli', 'spinach', 'kale', 'lettuce',
-      'tomato', 'cucumber', 'pepper', 'onion', 'garlic', 'potato', 'celery',
-      'beans', 'peas', 'corn', 'cabbage', 'asparagus', 'mushroom', 'zucchini'
+      'asparagus', 'green beans', 'squash', 'beets', 'radish', 
+      'brussels sprouts', 'cucumber', 'mustard greens', 'yams', 
+      'fried green tomatoes', 'artichoke', 'pickles'
     ]
   },
   {
     name: 'Fruits',
     emoji: '🍎',
     keywords: [
-      'apple', 'banana', 'orange', 'grape', 'strawberry', 'blueberry', 'raspberry',
-      'peach', 'pear', 'plum', 'cherry', 'mango', 'pineapple', 'watermelon',
-      'lemon', 'lime', 'kiwi', 'avocado', 'coconut'
+      'pomegranate', 'blueberry', 'papaya', 'key lime', 'passionfruit', 
+      'lychee', 'guava', 'mango', 'plum', 'pineapple', 'strawberries', 
+      'grapefruit'
     ]
   },
   {
-    name: 'Grains & Cereals',
-    emoji: '🌾',
+    name: 'Sweets & Desserts',
+    emoji: '🍰',
     keywords: [
-      'rice', 'quinoa', 'oats', 'barley', 'wheat', 'corn', 'millet', 'buckwheat',
-      'cereal', 'granola', 'oatmeal', 'pasta', 'noodles'
+      'gummy worms', 'toffee', 'caramel', 'pudding', 'devil\'s food cake', 
+      'butterscotch', 'jelly beans', 'dulce de leche', 'box of chocolates'
     ]
   },
   {
-    name: 'Proteins',
-    emoji: '🥩',
+    name: 'Beverages',
+    emoji: '🥤',
     keywords: [
-      'chicken', 'beef', 'pork', 'fish', 'salmon', 'tuna', 'turkey', 'lamb',
-      'eggs', 'tofu', 'tempeh', 'beans', 'lentils', 'nuts', 'seeds'
+      'caipirinha', 'amarula', 'lemonade', 'dandelion wine', 'sarsaparilla', 
+      'cocoa', 'champagne'
     ]
   },
   {
-    name: 'Dairy',
-    emoji: '🥛',
+    name: 'Special Occasions',
+    emoji: '🎉',
     keywords: [
-      'milk', 'cheese', 'yogurt', 'butter', 'cream', 'mozzarella', 'cheddar',
-      'parmesan', 'gouda', 'brie', 'feta', 'ricotta'
-    ]
-  },
-  {
-    name: 'Herbs & Spices',
-    emoji: '🌿',
-    keywords: [
-      'basil', 'oregano', 'thyme', 'rosemary', 'sage', 'parsley', 'cilantro',
-      'mint', 'dill', 'cinnamon', 'pepper', 'salt', 'ginger', 'turmeric'
+      'mantém a fé', '🎅🏾'
     ]
   }
 ];
@@ -81,7 +71,7 @@ export interface CategorizedPlaylist {
 
 export const categorizePlaylists = (playlists: any[]): CategorizedPlaylist[] => {
   return playlists.map(playlist => {
-    const playlistName = playlist.name.toLowerCase();
+    const playlistName = playlist.name.toLowerCase().trim();
     
     // Find the first matching category
     for (const category of FOOD_CATEGORIES) {
@@ -99,7 +89,7 @@ export const categorizePlaylists = (playlists: any[]): CategorizedPlaylist[] => 
     // Default category for unmatched items
     return {
       ...playlist,
-      category: 'Other Foods',
+      category: 'Other',
       categoryEmoji: '🍽️'
     };
   });
