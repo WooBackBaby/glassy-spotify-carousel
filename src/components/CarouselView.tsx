@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CategorizedPlaylist } from '@/utils/foodCategorizer';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface CarouselViewProps {
   playlists: CategorizedPlaylist[];
@@ -24,6 +25,7 @@ const CarouselView: React.FC<CarouselViewProps> = ({
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
   const [isDragging, setIsDragging] = useState(false);
+  const isMobile = useIsMobile();
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
@@ -72,18 +74,22 @@ const CarouselView: React.FC<CarouselViewProps> = ({
 
   return (
     <div className="max-w-4xl mx-auto px-8 mb-8">
-      {/* Navigation Buttons */}
-      <Button variant="ghost" size="icon" onClick={onPrev} className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
-        <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
-      </Button>
-      
-      <Button variant="ghost" size="icon" onClick={onNext} className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
-        <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
-      </Button>
+      {/* Navigation Buttons - Hidden on mobile */}
+      {!isMobile && (
+        <>
+          <Button variant="ghost" size="icon" onClick={onPrev} className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
+            <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
+          </Button>
+          
+          <Button variant="ghost" size="icon" onClick={onNext} className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
+            <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
+          </Button>
+        </>
+      )}
 
       {/* Carousel */}
       <div 
-        className="flex justify-center items-center h-[500px] overflow-hidden px-20 perspective-1000 touch-pan-y"
+        className={`flex justify-center items-center h-[500px] overflow-hidden perspective-1000 touch-pan-y ${isMobile ? 'px-4' : 'px-20'}`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -95,7 +101,7 @@ const CarouselView: React.FC<CarouselViewProps> = ({
               offset === 0 ? 'z-20' : offset === -1 || offset === 1 ? 'z-10' : 'z-0'
             }`}
             style={{
-              transform: `translateX(${offset * 180}px) translateY(${Math.abs(offset) * 25}px) rotateY(${offset * -20}deg) rotateZ(${offset * 4}deg) skewY(${offset * 2}deg) scale(${offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.8 : 0.65})`,
+              transform: `translateX(${offset * (isMobile ? 120 : 180)}px) translateY(${Math.abs(offset) * 25}px) rotateY(${offset * -20}deg) rotateZ(${offset * 4}deg) skewY(${offset * 2}deg) scale(${offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.8 : 0.65})`,
               opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
               filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
             }}
@@ -107,7 +113,7 @@ const CarouselView: React.FC<CarouselViewProps> = ({
                   <img
                     src={playlist.cover}
                     alt={playlist.name}
-                    className="w-64 h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                    className={`object-cover transition-transform duration-700 group-hover:scale-110 ${isMobile ? 'w-48 h-48' : 'w-64 h-64'}`}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 flex items-center justify-center">
                     <div className={`backdrop-blur-sm rounded-full p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100 ${darkMode ? 'bg-neutral-800/90' : 'bg-white/90'}`}>
