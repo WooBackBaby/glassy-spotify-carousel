@@ -27,6 +27,8 @@ const CarouselView: React.FC<CarouselViewProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const isMobile = useIsMobile();
 
+  console.log('isMobile:', isMobile, 'window width:', typeof window !== 'undefined' ? window.innerWidth : 'N/A');
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     setIsDragging(false);
@@ -37,6 +39,8 @@ const CarouselView: React.FC<CarouselViewProps> = ({
     const diff = Math.abs(touchStartX.current - touchEndX.current);
     if (diff > 10) {
       setIsDragging(true);
+      // Prevent default to avoid scrolling
+      e.preventDefault();
     }
   };
 
@@ -73,15 +77,25 @@ const CarouselView: React.FC<CarouselViewProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-8 mb-8">
-      {/* Navigation Buttons - Hidden on mobile */}
+    <div className="max-w-4xl mx-auto px-8 mb-8 relative">
+      {/* Navigation Buttons - Only show on desktop */}
       {!isMobile && (
         <>
-          <Button variant="ghost" size="icon" onClick={onPrev} className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onPrev} 
+            className={`absolute left-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}
+          >
             <ChevronLeft className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
           </Button>
           
-          <Button variant="ghost" size="icon" onClick={onNext} className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={onNext} 
+            className={`absolute right-8 top-1/2 -translate-y-1/2 z-30 shadow-xl hover:shadow-2xl rounded-full w-14 h-14 transition-all duration-300 hover:scale-110 ${darkMode ? 'progressive-blur border border-neutral-600/40' : 'bg-white/90 hover:bg-white border border-slate-200/50'}`}
+          >
             <ChevronRight className={`h-5 w-5 ${darkMode ? 'text-neutral-200/90' : 'text-slate-700/90'}`} />
           </Button>
         </>
@@ -89,10 +103,11 @@ const CarouselView: React.FC<CarouselViewProps> = ({
 
       {/* Carousel */}
       <div 
-        className={`flex justify-center items-center h-[500px] overflow-hidden perspective-1000 touch-pan-y ${isMobile ? 'px-4' : 'px-20'}`}
+        className={`flex justify-center items-center h-[500px] overflow-hidden perspective-1000 ${isMobile ? 'px-4 touch-pan-y' : 'px-20'}`}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        style={{ touchAction: isMobile ? 'pan-y' : 'auto' }}
       >
         {getVisiblePlaylists().map(({ playlist, offset }) => (
           <div
