@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CategorizedPlaylist } from '@/utils/foodCategorizer';
@@ -21,6 +21,41 @@ const CarouselView: React.FC<CarouselViewProps> = ({
   onPlaylistClick,
   darkMode
 }) => {
+  const touchStartX = useRef<number>(0);
+  const touchEndX = useRef<number>(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    setIsDragging(false);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+    const diff = Math.abs(touchStartX.current - touchEndX.current);
+    if (diff > 10) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50; // Minimum swipe distance
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swiped left - go to next
+        onNext();
+      } else {
+        // Swiped right - go to previous
+        onPrev();
+      }
+    }
+    setIsDragging(false);
+  };
+
   const getVisiblePlaylists = () => {
     if (playlists.length === 0) return [];
     
@@ -47,7 +82,12 @@ const CarouselView: React.FC<CarouselViewProps> = ({
       </Button>
 
       {/* Carousel */}
-      <div className="flex justify-center items-center h-[500px] overflow-hidden px-20 perspective-1000">
+      <div 
+        className="flex justify-center items-center h-[500px] overflow-hidden px-20 perspective-1000 touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {getVisiblePlaylists().map(({ playlist, offset }) => (
           <div
             key={playlist.id}
@@ -59,7 +99,7 @@ const CarouselView: React.FC<CarouselViewProps> = ({
               opacity: offset === 0 ? 1 : offset === -1 || offset === 1 ? 0.6 : 0.3,
               filter: offset === 0 ? 'none' : `blur(${Math.abs(offset) * 2}px)`
             }}
-            onClick={() => onPlaylistClick(playlist)}
+            onClick={() => !isDragging && onPlaylistClick(playlist)}
           >
             <div className="group relative preserve-3d">
               <div className={`progressive-blur rounded-3xl p-8 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-6 hover:scale-105 ${darkMode ? 'border border-neutral-600/30' : 'border border-white/30'}`}>
