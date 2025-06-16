@@ -49,7 +49,7 @@ const FloatingHeader: React.FC<FloatingHeaderProps> = ({
   return (
     <header className="fixed top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-50">
       <div className="max-w-4xl mx-auto">
-        <div className={`backdrop-blur-xl border shadow-2xl px-3 sm:px-6 py-2 sm:py-3 rounded-full transition-colors duration-300 max-w-full sm:max-w-[800px] h-[44px] sm:h-[52px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_5px_rgba(34,197,94,0.075)] ring-1 ring-green-500/10' : 'bg-white/80 border-white/20 shadow-[0_0_5px_rgba(34,197,94,0.05)] ring-1 ring-green-400/10'}`} style={{
+        <div className={`backdrop-blur-xl border shadow-2xl px-3 sm:px-6 py-4 sm:py-6 rounded-full transition-colors duration-300 max-w-full sm:max-w-[800px] h-[52px] sm:h-[64px] mx-auto flex items-center justify-between ${darkMode ? 'bg-neutral-900/80 border-neutral-700/20 shadow-[0_0_5px_rgba(34,197,94,0.075)] ring-1 ring-green-500/10' : 'bg-white/80 border-white/20 shadow-[0_0_5px_rgba(34,197,94,0.05)] ring-1 ring-green-400/10'}`} style={{
           boxShadow: darkMode ? '0 0 7.5px rgba(34, 197, 94, 0.1), 0 0 15px rgba(34, 197, 94, 0.025), inset 0 1px 0 rgba(255, 255, 255, 0.1)' : '0 0 7.5px rgba(34, 197, 94, 0.075), 0 0 15px rgba(34, 197, 94, 0.025), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
         }}>
           <Link to="/" className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1 no-underline">
